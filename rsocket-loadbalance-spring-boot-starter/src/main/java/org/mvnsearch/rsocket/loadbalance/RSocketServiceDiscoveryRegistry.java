@@ -117,9 +117,16 @@ public class RSocketServiceDiscoveryRegistry implements RSocketServiceRegistry {
     }
 
     private RSocketServerInstance convertToRSocketServerInstance(ServiceInstance serviceInstance) {
-        String host = serviceInstance.getHost();
-        String rsocketPort = serviceInstance.getMetadata().getOrDefault("rsocketPort", "6565");
-        return new RSocketServerInstance(host, Integer.parseInt(rsocketPort));
+        RSocketServerInstance serverInstance = new RSocketServerInstance();
+        serverInstance.setHost(serviceInstance.getHost());
+        serverInstance.setSchema(serviceInstance.getMetadata().getOrDefault("rsocketSchema", "tcp"));
+        if (serverInstance.isWebSocket()) {
+            serverInstance.setPort(serviceInstance.getPort());
+            serverInstance.setPath(serviceInstance.getMetadata().getOrDefault("rsocketPath", "/rsocket"));
+        } else {
+            serverInstance.setPort(Integer.parseInt(serviceInstance.getMetadata().getOrDefault("rsocketPort", "42252")));
+        }
+        return serverInstance;
     }
 
 }
