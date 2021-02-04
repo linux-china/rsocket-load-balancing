@@ -106,6 +106,10 @@ public class RSocketServiceDiscoveryRegistry implements RSocketServiceRegistry {
 
     private String convertToAppName(String serviceName) {
         String appName = serviceName.replaceAll("\\.", "-");
+        // rsocket broker validation, appName is broker cluster's name
+        if (serviceName.startsWith("broker")) {
+            return appName.substring(0, appName.indexOf("-"));
+        }
         if (appName.contains("-")) {
             String temp = appName.substring(appName.lastIndexOf("-") + 1);
             //如果首字母大写，则表示为服务接口名称
