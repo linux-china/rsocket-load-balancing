@@ -2,13 +2,14 @@ package org.mvnsearch.rsocket.loadbalance;
 
 import io.rsocket.loadbalance.LoadbalanceTarget;
 import io.rsocket.loadbalance.RoundRobinLoadbalanceStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.scheduling.annotation.Scheduled;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,16 +23,44 @@ public class RSocketServiceDiscoveryRegistry implements RSocketServiceRegistry {
     private final Map<String, Sinks.Many<List<RSocketServerInstance>>> service2Servers = new ConcurrentHashMap<>();
 
     private final Map<String, List<RSocketServerInstance>> snapshots = new HashMap<>();
-    @Autowired
     private ReactiveDiscoveryClient discoveryClient;
+    private Date lastRefreshTimeStamp = new Date();
     private boolean refreshing = false;
 
-    @Scheduled(fixedRate = 5000)
+    public RSocketServiceDiscoveryRegistry(ReactiveDiscoveryClient discoveryClient) {
+        this.discoveryClient = discoveryClient;
+    }
+
+    @Override
+    public Map<String, List<RSocketServerInstance>> getSnapshots() {
+        return this.snapshots;
+    }
+
+    @Override
+    public Date getLastRefreshTimestamp() {
+        return this.lastRefreshTimeStamp;
+    }
+
+    @Scheduled(initialDelay = 5000, fixedRate = 15000)
     public void refreshServers() {
         if (!refreshing) {
             refreshing = true;
+            lastRefreshTimeStamp = new Date();
             try {
-                System.out.println("Refresh server now");
+                if (!snapshots.isEmpty()) {
+                    for (String serviceName : service2Servers.keySet()) {
+                        discoveryClient.getInstances(serviceName)
+                                .map(this::convertToRSocketServerInstance)
+                                .collectList().subscribe(newServiceInstances -> {
+                            List<RSocketServerInstance> currentServerInstances = snapshots.get(serviceName);
+                            //not same
+                            if (!(currentServerInstances.size() == newServiceInstances.size() && currentServerInstances.containsAll(newServiceInstances))) {
+                                System.out.println("Begin to refresh upstream RSocket servers");
+                                setServers(serviceName, newServiceInstances);
+                            }
+                        });
+                    }
+                }
             } finally {
                 refreshing = false;
             }
@@ -56,11 +85,7 @@ public class RSocketServiceDiscoveryRegistry implements RSocketServiceRegistry {
         if (!service2Servers.containsKey(appName)) {
             service2Servers.put(appName, Sinks.many().replay().latest());
             return Flux.from(discoveryClient.getInstances(appName)
-                    .map(serviceInstance -> {
-                        String host = serviceInstance.getHost();
-                        String rsocketPort = serviceInstance.getMetadata().getOrDefault("rsocketPort", "6565");
-                        return new RSocketServerInstance(host, Integer.parseInt(rsocketPort));
-                    })
+                    .map(this::convertToRSocketServerInstance)
                     .collectList()
                     .doOnNext(rSocketServerInstances -> {
                         snapshots.put(appName, rSocketServerInstances);
@@ -89,6 +114,12 @@ public class RSocketServiceDiscoveryRegistry implements RSocketServiceRegistry {
             }
         }
         return appName;
+    }
+
+    private RSocketServerInstance convertToRSocketServerInstance(ServiceInstance serviceInstance) {
+        String host = serviceInstance.getHost();
+        String rsocketPort = serviceInstance.getMetadata().getOrDefault("rsocketPort", "6565");
+        return new RSocketServerInstance(host, Integer.parseInt(rsocketPort));
     }
 
 }
