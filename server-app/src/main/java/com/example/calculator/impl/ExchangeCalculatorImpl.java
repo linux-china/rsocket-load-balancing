@@ -6,7 +6,7 @@ import com.example.calculator.annotations.RSocketHandler;
 import com.example.calculator.annotations.RSocketService;
 
 @RSocketService("com.example.calculator.ExchangeCalculatorService")
-public class ExchangeCalculatorController implements ExchangeCalculatorService {
+public class ExchangeCalculatorImpl implements ExchangeCalculatorService {
     @Override
     @RSocketHandler("exchange")
     public double exchange(ExchangeRequest request) {

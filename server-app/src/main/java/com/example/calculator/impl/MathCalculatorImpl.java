@@ -6,7 +6,7 @@ import com.example.calculator.annotations.RSocketService;
 import reactor.core.publisher.Mono;
 
 @RSocketService("com.example.calculator.MathCalculatorService")
-public class MathCalculatorController implements MathCalculatorService {
+public class MathCalculatorImpl implements MathCalculatorService {
 
     @RSocketHandler("square")
     public Mono<Integer> square(Integer input) {
