@@ -22,10 +22,10 @@ Service interface naming should follow `String serviceName = appName.replace("-"
 * com.example.calculator.MathCalculatorService
 * com.example.calculator.ExchangeCalculatorService
 
-Why this naming style?  Take a look at the following steps:
+Why this naming style?  Take a look at the following steps to call remote RSocket services:
 
 * Extract appName from service full name. For example, appName is `com-example-calculator`  from `com.example.calculator.MathCalculatorService`
-* Invoke ReactiveDiscoveryClient.getInstances(appName) to get app instance list
+* Invoke `ReactiveDiscoveryClient.getInstances(appName)` to get app instance list
 * Build RSocketRequester with load balance support with `RSocketRequester.Builder.transports(servers)`
 * Call RSocketRequester api with service full name as routing key
 
