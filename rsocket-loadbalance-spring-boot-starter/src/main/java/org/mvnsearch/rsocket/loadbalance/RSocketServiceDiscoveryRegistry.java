@@ -1,34 +1,54 @@
-package com.example.rsocket.client.config.impl;
+package org.mvnsearch.rsocket.loadbalance;
 
-import com.example.rsocket.client.config.RSocketServerInstance;
-import com.example.rsocket.client.config.RSocketServiceRegistry;
 import io.rsocket.loadbalance.LoadbalanceTarget;
+import io.rsocket.loadbalance.RoundRobinLoadbalanceStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
-import org.springframework.stereotype.Service;
+import org.springframework.messaging.rsocket.RSocketRequester;
+import org.springframework.scheduling.annotation.Scheduled;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@Service
-public class SpringServiceDiscoveryRegistry implements RSocketServiceRegistry {
+public class RSocketServiceDiscoveryRegistry implements RSocketServiceRegistry {
     /**
      * 应用名称和应用对应的最新地址列表
      */
-    private Map<String, Sinks.Many<List<RSocketServerInstance>>> service2Servers = new ConcurrentHashMap<>();
+    private final Map<String, Sinks.Many<List<RSocketServerInstance>>> service2Servers = new ConcurrentHashMap<>();
 
+    private final Map<String, List<RSocketServerInstance>> snapshots = new HashMap<>();
     @Autowired
     private ReactiveDiscoveryClient discoveryClient;
+    private boolean refreshing = false;
+
+    @Scheduled(fixedRate = 5000)
+    public void refreshServers() {
+        if (!refreshing) {
+            refreshing = true;
+            try {
+                System.out.println("Refresh server now");
+            } finally {
+                refreshing = false;
+            }
+        }
+    }
 
     public void setServers(String serviceName, List<RSocketServerInstance> servers) {
         String appName = convertToAppName(serviceName);
         if (service2Servers.containsKey(appName)) {
             this.service2Servers.get(appName).tryEmitNext(servers);
+            this.snapshots.put(appName, servers);
         }
+    }
+
+    @Override
+    public RSocketRequester buildLoadBalanceRSocket(String serviceName, RSocketRequester.Builder builder) {
+        return builder.transports(this.getServers(serviceName), new RoundRobinLoadbalanceStrategy());
     }
 
     public Flux<List<LoadbalanceTarget>> getServers(String serviceName) {
@@ -42,7 +62,10 @@ public class SpringServiceDiscoveryRegistry implements RSocketServiceRegistry {
                         return new RSocketServerInstance(host, Integer.parseInt(rsocketPort));
                     })
                     .collectList()
-                    .doOnNext(rSocketServerInstances -> service2Servers.get(appName).tryEmitNext(rSocketServerInstances)))
+                    .doOnNext(rSocketServerInstances -> {
+                        snapshots.put(appName, rSocketServerInstances);
+                        service2Servers.get(appName).tryEmitNext(rSocketServerInstances);
+                    }))
                     .thenMany(service2Servers.get(appName).asFlux().map(this::toLoadBalanceTarget));
         }
         return service2Servers.get(appName)
