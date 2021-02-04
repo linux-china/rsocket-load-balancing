@@ -14,4 +14,8 @@ public class RSocketLoadBalanceConfiguration {
         return new RSocketServiceDiscoveryRegistry(discoveryClient);
     }
 
+    @Bean
+    public RSocketLoadBalanceEndpoint rsocketLoadBalanceEndpoint(RSocketServiceRegistry rsocketServiceRegistry) {
+        return new RSocketLoadBalanceEndpoint(rsocketServiceRegistry);
+    }
 }
