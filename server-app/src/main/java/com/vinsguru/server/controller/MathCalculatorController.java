@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Mono;
 
 @Controller
-@MessageMapping("com.example.CalculatorService")
-public class CalculatorController implements CalculatorService {
+@MessageMapping("com.example.calculator.MathCalculatorService")
+public class MathCalculatorController implements MathCalculatorService {
 
     @MessageMapping("square")
     public Mono<Integer> square(Integer input) {
