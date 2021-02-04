@@ -1,0 +1,17 @@
+package com.example.calculator.annotations;
+
+import org.springframework.core.annotation.AliasFor;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.stereotype.Controller;
+
+import java.lang.annotation.*;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Controller
+@MessageMapping()
+public @interface RSocketService {
+    @AliasFor(annotation = MessageMapping.class)
+    String[] value() default {};
+}
