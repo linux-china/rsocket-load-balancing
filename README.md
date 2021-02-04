@@ -1,5 +1,5 @@
-RSocket Load Balancing
-======================
+RSocket Load Balancing with Spring Cloud Registry
+=================================================
 
 基于Spring Cloud Consul服务注册发现的RSocket负载均衡，架构如下：
 
@@ -38,4 +38,5 @@ Spring Cloud的注册发现机制是基于`spring.application.name`，也就是�
 
 # References
 
-* Spring Retrosocket: https://github.com/spring-projects-experimental/spring-retrosocket
+* Spring Cloud Consul: https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/
+* RSocket Load Balancing: https://www.vinsguru.com/rsocket-load-balancing-client-side/
