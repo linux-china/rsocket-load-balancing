@@ -1,42 +1,44 @@
 RSocket Load Balancing with Spring Cloud Registry
 =================================================
 
-基于Spring Cloud Consul服务注册发现的RSocket负载均衡，架构如下：
+RSocket load balance based on Spring Cloud Service Registry.
 
 ![LoadBalance Structure](./loadbalance-structure.png)
 
-# 如何运行?
+# How to run?
 
-* 首先启动Consul： `docker-compose up -d` ，然后访问 http://localhost:8500
-* 启动server-app: `mvn -pl server-app spring-boot:run`
-* 启动client-app: `mvn -pl client-app spring-boot:run`
-* 测试服务： `curl http://localhost:9080/square/3`
+* Start Consul first： `docker-compose up -d` ，then open http://localhost:8500
+* Start server-app: `mvn -pl server-app spring-boot:run`
+* Start client-app: `mvn -pl client-app spring-boot:run`
+* Test your RSocket service invocation： `curl http://localhost:9080/square/3`
 
+# App & Service interface naming specification
+Spring Cloud Service Registry uses `spring.application.name` as service name on registry server, and appName is the serviceId argument in `ReactiveDiscoveryClient.getInstances(String serviceId);`
 
-# 服务命名规范
-Spring Cloud的注册发现机制是基于`spring.application.name`，也就是后续的服务查找就是基于该名称进行的。 应用名称不能包含"."，这个不是合法的DNS主机名，会被转换为"-"。
-
-假设你有一个服务应用，名称为calculator，同时提供两个服务: 数学计算器服务(MathCalculatorService)和汇率计算服务(ExchangeCalculatorService),
-那么你的应用名则为 com-example-calculator，请确保命名空间(calculator)和其他人不冲突。
-
-对应的服务命名则为如下：
+For example, we have a service app with two service interfaces: MathCalculatorService and ExchangeCalculatorService.  
+Please use Java package naming style to name your app, such as `com-example-calculator`.
+Service interface naming should follow `String serviceName = appName.replace("-", ".") + "." + interfaceName; ` rule, example as following:
 
 * com.example.calculator.MathCalculatorService
 * com.example.calculator.ExchangeCalculatorService
 
-请确保应用名和服务名之间不要有其他字符串，这个约定主要是方便服务发现查找服务。
+Why this naming style?  Take a look at the following steps:
 
-# 客户端调用
+* Extract appName from service full name. For example, appName is `com-example-calculator`  from `com.example.calculator.MathCalculatorService`
+* Invoke ReactiveDiscoveryClient.getInstances(appName) to get app instance list
+* Build RSocketRequester with load balance support with `RSocketRequester.Builder.transports(servers)`
+* Call RSocketRequester api with service full name as routing key
 
-假设客户端要调用 com.example.calculator.LoanCalculatorService 服务，流程如下：
+```
+ rsocketRequester.route("com.example.calculator.MathCalculatorService.square")
+                .data(number)
+                .retrieveMono(Integer.class)
+```
 
-* 根据 "com-example-calculator" 应用名，查找对应的服务地址列表
-* 创建和 "com-example-calculator" 应用对应服务器列表的连接
-* 根据 "com.example.calculator.LoanCalculatorService.xxx" 路由发送服务给服务提供方
-* 接收服务方返回的结果。
-
+This naming style is easy for RSocket to interact with service registry and RSocket service routing.
 
 # References
 
 * Spring Cloud Consul: https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/
+* Spring Retrosocket: https://github.com/spring-projects-experimental/spring-retrosocket
 * RSocket Load Balancing: https://www.vinsguru.com/rsocket-load-balancing-client-side/
