@@ -2,10 +2,21 @@ package org.mvnsearch.rsocket.loadbalance;
 
 import io.rsocket.transport.ClientTransport;
 import io.rsocket.transport.netty.client.TcpClientTransport;
+import io.rsocket.transport.netty.client.WebsocketClientTransport;
+
+import java.net.URI;
 
 public class RSocketServerInstance {
     private String host;
     private int port;
+    /**
+     * schema, such as tcp, ws, wss
+     */
+    private String schema = "tcp";
+    /**
+     * path, for websocket only
+     */
+    private String path;
 
     public RSocketServerInstance() {
     }
@@ -31,7 +42,27 @@ public class RSocketServerInstance {
         this.port = port;
     }
 
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public ClientTransport constructClientTransport() {
+        if ("ws".equals(this.schema) || "wss".equals(this.schema)) {
+            URI uri = URI.create(schema + "://" + host + ":" + port + path);
+            return WebsocketClientTransport.create(uri);
+        }
         return TcpClientTransport.create(host, port);
     }
 
