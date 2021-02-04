@@ -10,14 +10,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.vinsguru</groupId>
+    <groupId>org.mvnsearch</groupId>
     <artifactId>rsocket-load-balancing</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>rsocket-load-balancing</name>
     <description>RSocket load balance with Spring Boot RSocket</description>
 
     <modules>
+        <module>rsocket-loadbalance-spring-boot-starter</module>
         <module>server-app</module>
         <module>client-app</module>
     </modules>
