@@ -1,0 +1,2 @@
+# square number
+GET http://localhost:9080/square/3
