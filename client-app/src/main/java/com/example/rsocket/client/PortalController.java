@@ -1,6 +1,6 @@
 package com.example.rsocket.client;
 
-import com.example.rsocket.client.proxy.MathCalculatorService;
+import com.example.rsocket.client.config.MathCalculatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.web.bind.annotation.GetMapping;
