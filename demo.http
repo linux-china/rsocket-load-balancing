@@ -1,6 +1,8 @@
 ### square number
 GET http://localhost:9080/square/3
 
+### exchange USD to CNY
+GET http://localhost:9080/exchange/1
 
 ### get rsocketlb endpoint
 GET http://localhost:9080/actuator/rsocketlb
