@@ -1,4 +1,4 @@
-package com.example.rsocket.client.proxy;
+package org.mvnsearch.rsocket.loadbalance.proxy;
 
 import org.springframework.messaging.rsocket.RSocketRequester;
 
