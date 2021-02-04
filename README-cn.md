@@ -31,6 +31,10 @@ Spring Cloud的注册发现机制是基于`spring.application.name`，也就是�
 
 而 `com.example.calculator.math.MathCalculatorService` 则是错误的 :x:, 因为在应用名称和接口名称之间多了`math`。
 
+在RSocket的架构中还有另外一种架构方式，就是Broker架构，如果一个RSocket服务提供者同时端口监听和Broker注册，那么如何通过broker来访问该服务？
+这里我们采用一个broker前缀来判断，如缺省的broker集群的应用名称为`broker`, 当然也可以为`broker1`, `broker2`，通过这种添加前缀的方式，我们可以识别出是否要经过Broker进行通讯，
+样例的名称如 `broker.com.example.calculator.MathCalculatorService`。
+
 为何要采用这种命名规范？ 首先让我们看一下是如何调用远程RSocket服务的：
 
 * 首先我们根据Service全面提取处对应的应用名称(appName)，如 `com.example.calculator.MathCalculatorService` 服务对应的appName则为`com-example-calculator`
