@@ -1,6 +1,8 @@
 package com.example.calculator;
 
+import reactor.core.publisher.Mono;
+
 public interface ExchangeCalculatorService {
 
-    double exchange(ExchangeRequest request);
+    Mono<Double> exchange(ExchangeRequest request);
 }
