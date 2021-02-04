@@ -18,6 +18,10 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mvnsearch</groupId>
             <artifactId>rsocket-loadbalance-spring-boot-starter</artifactId>
             <version>1.0.0-SNAPSHOT</version>
