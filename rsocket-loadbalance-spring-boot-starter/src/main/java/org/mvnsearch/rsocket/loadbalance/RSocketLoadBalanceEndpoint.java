@@ -19,6 +19,7 @@ public class RSocketLoadBalanceEndpoint {
     public Map<String, Object> info() {
         Map<String, Object> info = new HashMap<>();
         info.put("services", rsocketServiceRegistry.getSnapshots());
+        info.put("lastRefreshAt", rsocketServiceRegistry.getLastRefreshTimestamp());
         return info;
     }
 }
