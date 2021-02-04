@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 public class DummyServiceRegistry implements RSocketServiceRegistry {
 
     private List<RSocketServerInstance> servers;
-    private Sinks.Many<List<RSocketServerInstance>> registry = Sinks.many().replay().latest();
+    private Sinks.Many<List<RSocketServerInstance>> serversSink = Sinks.many().replay().latest();
 
     public void setServers(List<RSocketServerInstance> servers) {
         this.servers = servers;
-        this.registry.tryEmitNext(servers);
+        this.serversSink.tryEmitNext(servers);
     }
 
     public Flux<List<LoadbalanceTarget>> getServers() {
-        return registry.asFlux()
+        return serversSink.asFlux()
                 .map(this::toLoadBalanceTarget);
     }
 
