@@ -1,8 +1,7 @@
 package com.example.rsocket.client.config;
 
-import com.example.rsocket.client.proxy.MathCalculatorService;
-import com.example.rsocket.client.proxy.RSocketRemoteServiceBuilder;
-import io.rsocket.loadbalance.RoundRobinLoadbalanceStrategy;
+import org.mvnsearch.rsocket.loadbalance.RSocketServiceRegistry;
+import org.mvnsearch.rsocket.loadbalance.proxy.RSocketRemoteServiceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.codec.cbor.Jackson2CborDecoder;
@@ -24,22 +23,20 @@ public class RSocketConfig {
     @Bean
     public RSocketRequester mathCalculatorRequester(RSocketRequester.Builder builder,
                                                     RSocketServiceRegistry rsocketServiceRegistry) {
-        return builder.transports(rsocketServiceRegistry.getServers("com.example.calculator.MathCalculatorService"),
-                new RoundRobinLoadbalanceStrategy());
+        return rsocketServiceRegistry.buildLoadBalanceRSocket(MathCalculatorService.RSOCKET_SERVICE_NAME, builder);
     }
 
     @Bean
     public RSocketRequester exchangeCalculatorRequester(RSocketRequester.Builder builder,
                                                         RSocketServiceRegistry rsocketServiceRegistry) {
-        return builder.transports(rsocketServiceRegistry.getServers("com.example.calculator.ExchangeCalculatorService"),
-                new RoundRobinLoadbalanceStrategy());
+        return rsocketServiceRegistry.buildLoadBalanceRSocket("com.example.calculator.ExchangeCalculatorService", builder);
     }
 
     @Bean
     public MathCalculatorService mathCalculatorService(RSocketRequester mathCalculatorRequester) {
         RSocketRemoteServiceBuilder<MathCalculatorService> builder = new RSocketRemoteServiceBuilder<>();
-        return builder.serviceName("com.example.calculator.MathCalculatorService").
-                serviceInterface(MathCalculatorService.class)
+        return builder.serviceName(MathCalculatorService.RSOCKET_SERVICE_NAME)
+                .serviceInterface(MathCalculatorService.class)
                 .rsocketRequester(mathCalculatorRequester)
                 .build();
     }
