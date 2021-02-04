@@ -23,7 +23,7 @@ public class RSocketClientApplication implements CommandLineRunner {
     public void run(String... args) {
         Flux.range(1, 6)
                 .delayElements(Duration.ofMillis(100))
-                .flatMap(i -> rSocketRequester.route("square-calculator").data(i).retrieveMono(Integer.class).retry(1))
+                .flatMap(i -> rSocketRequester.route("com.example.CalculatorService.square").data(i).retrieveMono(Integer.class).retry(1))
                 .doOnNext(i -> System.out.println("Response : " + i))
                 .blockLast();
     }
