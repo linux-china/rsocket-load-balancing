@@ -29,7 +29,7 @@ public class RSocketConfig {
     @Bean
     public RSocketRequester exchangeCalculatorRequester(RSocketRequester.Builder builder,
                                                         RSocketServiceRegistry rsocketServiceRegistry) {
-        return rsocketServiceRegistry.buildLoadBalanceRSocket("com.example.calculator.ExchangeCalculatorService", builder);
+        return rsocketServiceRegistry.buildLoadBalanceRSocket(ExchangeCalculatorService.RSOCKET_SERVICE_NAME, builder);
     }
 
     @Bean
@@ -38,6 +38,15 @@ public class RSocketConfig {
         return builder.serviceName(MathCalculatorService.RSOCKET_SERVICE_NAME)
                 .serviceInterface(MathCalculatorService.class)
                 .rsocketRequester(mathCalculatorRequester)
+                .build();
+    }
+
+    @Bean
+    public ExchangeCalculatorService exchangeCalculatorService(RSocketRequester exchangeCalculatorRequester) {
+        RSocketRemoteServiceBuilder<ExchangeCalculatorService> builder = new RSocketRemoteServiceBuilder<>();
+        return builder.serviceName(ExchangeCalculatorService.RSOCKET_SERVICE_NAME)
+                .serviceInterface(ExchangeCalculatorService.class)
+                .rsocketRequester(exchangeCalculatorRequester)
                 .build();
     }
 
