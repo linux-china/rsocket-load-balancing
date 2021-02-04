@@ -61,11 +61,18 @@ public class RSocketServerInstance {
     public boolean isWebSocket() {
         return "ws".equals(this.schema) || "wss".equals(this.schema);
     }
+    
+    public String getURI() {
+        if(isWebSocket())  {
+            return schema + "://" + host + ":" + port + path;
+        }   else {
+            return schema +"://"+host+":"+port;
+        }
+    }
 
     public ClientTransport constructClientTransport() {
         if (this.isWebSocket()) {
-            URI uri = URI.create(schema + "://" + host + ":" + port + path);
-            return WebsocketClientTransport.create(uri);
+            return WebsocketClientTransport.create(URI.create(getURI()));
         }
         return TcpClientTransport.create(host, port);
     }
