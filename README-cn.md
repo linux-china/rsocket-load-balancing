@@ -49,5 +49,6 @@ Spring Cloud的注册发现机制是基于`spring.application.name`，也就是�
 
 # References
 
+* YMNNALFT: Easy RPC with RSocket: https://spring.io/blog/2021/01/18/ymnnalft-easy-rpc-with-rsocket
 * Spring Cloud Consul: https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/
 * RSocket Load Balancing: https://www.vinsguru.com/rsocket-load-balancing-client-side/

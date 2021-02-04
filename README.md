@@ -39,6 +39,7 @@ This naming style is easy for RSocket to interact with service registry and RSoc
 
 # References
 
+* YMNNALFT: Easy RPC with RSocket: https://spring.io/blog/2021/01/18/ymnnalft-easy-rpc-with-rsocket
 * Spring Cloud Consul: https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/
 * Spring Retrosocket: https://github.com/spring-projects-experimental/spring-retrosocket
 * RSocket Load Balancing: https://www.vinsguru.com/rsocket-load-balancing-client-side/
