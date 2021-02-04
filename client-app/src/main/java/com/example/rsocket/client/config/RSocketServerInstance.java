@@ -1,4 +1,4 @@
-package com.vinsguru.client.config;
+package com.example.rsocket.client.config;
 
 import io.rsocket.transport.ClientTransport;
 import io.rsocket.transport.netty.client.TcpClientTransport;

@@ -1,4 +1,4 @@
-package com.vinsguru.client.config;
+package com.example.rsocket.client.config;
 
 import io.rsocket.loadbalance.RoundRobinLoadbalanceStrategy;
 import org.springframework.context.annotation.Bean;

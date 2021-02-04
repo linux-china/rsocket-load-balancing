@@ -1,4 +1,4 @@
-package com.vinsguru.client;
+package com.example.rsocket.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.rsocket.RSocketRequester;

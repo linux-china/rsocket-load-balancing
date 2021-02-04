@@ -1,4 +1,4 @@
-package com.vinsguru.client.config;
+package com.example.rsocket.client.config;
 
 import io.rsocket.loadbalance.LoadbalanceTarget;
 import reactor.core.publisher.Flux;
