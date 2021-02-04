@@ -26,7 +26,7 @@ public class RSocketRemoteServiceBuilder<T> {
 
     @SuppressWarnings("unchecked")
     public T build() {
-        RSocketRemoteCallInvocationHandler handler = new RSocketRemoteCallInvocationHandler(rsocketRequester, serviceName);
+        RSocketRemoteCallInvocationHandler handler = new RSocketRemoteCallInvocationHandler(rsocketRequester, serviceName, serviceInterface);
         return (T) Proxy.newProxyInstance(
                 serviceInterface.getClassLoader(),
                 new Class[]{serviceInterface},
