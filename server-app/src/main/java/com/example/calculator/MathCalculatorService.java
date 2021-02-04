@@ -1,4 +1,4 @@
-package com.vinsguru.server.controller;
+package com.example.calculator;
 
 import reactor.core.publisher.Mono;
 
