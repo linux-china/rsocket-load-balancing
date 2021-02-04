@@ -10,11 +10,11 @@ import reactor.core.publisher.Mono;
 @RestController
 public class PortalController {
     @Autowired
-    private RSocketRequester calculatorRequester;
+    private RSocketRequester mathCalculatorRequester;
 
     @GetMapping("/square/{number}")
     public Mono<String> index(@PathVariable("number") int number) {
-        return calculatorRequester.route("com.example.CalculatorService.square")
+        return mathCalculatorRequester.route("com.example.calculator.MathCalculatorService.square")
                 .data(number)
                 .retrieveMono(Integer.class)
                 .map(result -> number + "*" + number + "=" + result);
