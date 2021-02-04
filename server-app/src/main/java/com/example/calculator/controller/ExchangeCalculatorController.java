@@ -2,14 +2,13 @@ package com.example.calculator.controller;
 
 import com.example.calculator.ExchangeCalculatorService;
 import com.example.calculator.ExchangeRequest;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
+import com.example.calculator.annotations.RSocketHandler;
+import com.example.calculator.annotations.RSocketService;
 
-@Controller
-@MessageMapping("com.example.calculator.ExchangeCalculatorService")
+@RSocketService("com.example.calculator.ExchangeCalculatorService")
 public class ExchangeCalculatorController implements ExchangeCalculatorService {
     @Override
-    @MessageMapping("exchange")
+    @RSocketHandler("exchange")
     public double exchange(ExchangeRequest request) {
         if (request.getSource().equals("USD") && request.getTarget().equals("CNY")) {
             return request.getAmount() * 6.4;
