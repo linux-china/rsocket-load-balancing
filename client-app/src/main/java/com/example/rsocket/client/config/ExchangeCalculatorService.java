@@ -1,13 +1,14 @@
 package com.example.rsocket.client.config;
 
+import reactor.core.publisher.Mono;
+
 public interface ExchangeCalculatorService {
     String RSOCKET_SERVICE_NAME = "com.example.calculator.ExchangeCalculatorService";
 
-    double exchange(ExchangeRequest request);
+    Mono<Double> exchange(ExchangeRequest request);
 
-    default double rmbToDollar(double amount) {
-
-        return exchange(new ExchangeRequest(amount, "CNY", "USD"));
+    default Mono<Double> dollarToRMB(double amount) {
+        return exchange(new ExchangeRequest(amount, "USD", "CNY"));
     }
 
 }
