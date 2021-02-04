@@ -10,19 +10,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RSocketRemoteCallInvocationHandler implements InvocationHandler {
-
     private final RSocketRequester rsocketRequester;
+    private final Class<?> serviceInterface;
     private final String serviceName;
     private final static Map<Method, Class<?>> methodReturnTypeMap = new HashMap<>();
 
-    public RSocketRemoteCallInvocationHandler(RSocketRequester rsocketRequester, String serviceName) {
+    public RSocketRemoteCallInvocationHandler(RSocketRequester rsocketRequester, String serviceName, Class<?> serviceInterface) {
         this.rsocketRequester = rsocketRequester;
         this.serviceName = serviceName;
+        this.serviceInterface = serviceInterface;
     }
 
     @SuppressWarnings("SuspiciousInvocationHandlerImplementation")
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (method.isDefault()) {
+            return DefaultMethodHandler.getMethodHandle(method, serviceInterface).bindTo(proxy).invokeWithArguments(args);
+        }
         String methodName = method.getName();
         Object arg = null;
         if (args != null && args.length > 0) {
