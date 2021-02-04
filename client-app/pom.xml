@@ -6,8 +6,8 @@
 
     <parent>
         <artifactId>rsocket-load-balancing</artifactId>
-        <groupId>com.vinsguru</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.mvnsearch</groupId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>client-app</artifactId>
@@ -16,6 +16,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mvnsearch</groupId>
+            <artifactId>rsocket-loadbalance-spring-boot-starter</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
