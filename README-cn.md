@@ -15,7 +15,8 @@ RSocket Load Balancing with Spring Cloud Registry
 
 # 应用和服务命名规范
 Spring Cloud的注册发现机制是基于`spring.application.name`，也就是后续的服务查找就是基于该名称进行的。  
-如果你调用`ReactiveDiscoveryClient.getInstances(String serviceId);`查找服务实例列表是，这个serviceId参数其实就是Spring的应用名称。
+如果你调用`ReactiveDiscoveryClient.getInstances(String serviceId);`查找服务实例列表时，这个serviceId参数其实就是Spring的应用名称。
+考虑到服务注册和后续的RSocket服务路由，所以我们打算设计一个简单的命名规范。
 
 **注意：** 应用名称不能包含"."，这个不是合法的DNS主机名，会被Service Registry转换为"-"。
 
