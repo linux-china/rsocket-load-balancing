@@ -1,4 +1,4 @@
-package com.example.rsocket.client.config;
+package org.mvnsearch.rsocket.loadbalance;
 
 import io.rsocket.transport.ClientTransport;
 import io.rsocket.transport.netty.client.TcpClientTransport;
