@@ -3,10 +3,10 @@ package com.example.calculator.impl;
 import com.example.calculator.ExchangeCalculatorService;
 import com.example.calculator.ExchangeRequest;
 import com.example.calculator.annotations.RSocketHandler;
-import com.example.calculator.annotations.RSocketService;
+import com.example.calculator.annotations.SpringRSocketService;
 import reactor.core.publisher.Mono;
 
-@RSocketService("com.example.calculator.ExchangeCalculatorService")
+@SpringRSocketService("com.example.calculator.ExchangeCalculatorService")
 public class ExchangeCalculatorImpl implements ExchangeCalculatorService {
     @Override
     @RSocketHandler("exchange")

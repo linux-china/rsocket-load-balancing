@@ -2,10 +2,10 @@ package com.example.calculator.impl;
 
 import com.example.calculator.MathCalculatorService;
 import com.example.calculator.annotations.RSocketHandler;
-import com.example.calculator.annotations.RSocketService;
+import com.example.calculator.annotations.SpringRSocketService;
 import reactor.core.publisher.Mono;
 
-@RSocketService("com.example.calculator.MathCalculatorService")
+@SpringRSocketService("com.example.calculator.MathCalculatorService")
 public class MathCalculatorImpl implements MathCalculatorService {
 
     @RSocketHandler("square")
