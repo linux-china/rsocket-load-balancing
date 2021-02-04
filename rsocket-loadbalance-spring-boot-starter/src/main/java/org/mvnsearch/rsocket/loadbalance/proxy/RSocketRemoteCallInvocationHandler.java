@@ -1,6 +1,7 @@
 package org.mvnsearch.rsocket.loadbalance.proxy;
 
 import org.springframework.messaging.rsocket.RSocketRequester;
+import reactor.core.publisher.Flux;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -21,7 +22,6 @@ public class RSocketRemoteCallInvocationHandler implements InvocationHandler {
         this.serviceInterface = serviceInterface;
     }
 
-    @SuppressWarnings("SuspiciousInvocationHandlerImplementation")
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.isDefault()) {
@@ -37,12 +37,26 @@ public class RSocketRemoteCallInvocationHandler implements InvocationHandler {
             returnType = parseInferredClass(method.getGenericReturnType());
             methodReturnTypeMap.put(method, returnType);
         }
+        RSocketRequester.RequestSpec requestSpec = rsocketRequester.route(serviceName + "." + methodName);
+        RSocketRequester.RetrieveSpec retrieveSpec;
         if (arg != null) {
-            return rsocketRequester.route(serviceName + "." + methodName).data(arg).retrieveMono(returnType);
+            retrieveSpec = requestSpec.data(arg);
         } else {
-            return rsocketRequester.route(serviceName + "." + methodName).retrieveMono(returnType);
+            retrieveSpec = requestSpec;
+        }
+        // Flux return type: request/stream or channel
+        if (method.getReturnType().isAssignableFrom(Flux.class)) {
+            return retrieveSpec.retrieveFlux(returnType);
+        } else { //Mono return type
+            // Void return type: fireAndForget
+            if (returnType.equals(Void.class)) {
+                return retrieveSpec.send();
+            } else { // request/response
+                return requestSpec.retrieveMono(returnType);
+            }
         }
     }
+
 
     public static Class<?> parseInferredClass(Type genericType) {
         Class<?> inferredClass = null;
