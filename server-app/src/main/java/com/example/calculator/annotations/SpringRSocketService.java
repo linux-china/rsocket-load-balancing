@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 @Controller
 @MessageMapping()
-public @interface RSocketService {
+public @interface SpringRSocketService {
     @AliasFor(annotation = MessageMapping.class)
     String[] value() default {};
 }
