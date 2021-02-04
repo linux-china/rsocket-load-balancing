@@ -1,5 +1,6 @@
 package com.example.rsocket.client;
 
+import com.example.rsocket.client.config.ExchangeCalculatorService;
 import com.example.rsocket.client.config.MathCalculatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.rsocket.RSocketRequester;
@@ -14,6 +15,8 @@ public class PortalController {
     private RSocketRequester mathCalculatorRequester;
     @Autowired
     private MathCalculatorService mathCalculatorService;
+    @Autowired
+    private ExchangeCalculatorService exchangeCalculatorService;
 
     @GetMapping("/square/{number}")
     public Mono<String> square(@PathVariable("number") int number) {
@@ -27,5 +30,11 @@ public class PortalController {
                 .data(number)
                 .retrieveMono(Integer.class)
                 .map(result -> number + "*" + number + "=" + result);
+    }
+
+    @GetMapping("/exchange/{number}")
+    public Mono<String> exchangeUSD2CNY(@PathVariable("number") int number) {
+        return exchangeCalculatorService.dollarToRMB(number)
+                .map(result -> number + "$ = " + result + "RMB");
     }
 }
