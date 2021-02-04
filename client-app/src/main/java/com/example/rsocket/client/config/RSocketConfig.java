@@ -1,5 +1,7 @@
 package com.example.rsocket.client.config;
 
+import com.example.rsocket.client.proxy.MathCalculatorService;
+import com.example.rsocket.client.proxy.RSocketRemoteServiceBuilder;
 import io.rsocket.loadbalance.RoundRobinLoadbalanceStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,22 @@ public class RSocketConfig {
                                                     RSocketServiceRegistry rsocketServiceRegistry) {
         return builder.transports(rsocketServiceRegistry.getServers("com.example.calculator.MathCalculatorService"),
                 new RoundRobinLoadbalanceStrategy());
+    }
+
+    @Bean
+    public RSocketRequester exchangeCalculatorRequester(RSocketRequester.Builder builder,
+                                                        RSocketServiceRegistry rsocketServiceRegistry) {
+        return builder.transports(rsocketServiceRegistry.getServers("com.example.calculator.ExchangeCalculatorService"),
+                new RoundRobinLoadbalanceStrategy());
+    }
+
+    @Bean
+    public MathCalculatorService mathCalculatorService(RSocketRequester mathCalculatorRequester) {
+        RSocketRemoteServiceBuilder<MathCalculatorService> builder = new RSocketRemoteServiceBuilder<>();
+        return builder.serviceName("com.example.calculator.MathCalculatorService").
+                serviceInterface(MathCalculatorService.class)
+                .rsocketRequester(mathCalculatorRequester)
+                .build();
     }
 
 }
