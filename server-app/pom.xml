@@ -6,8 +6,8 @@
 
     <parent>
         <artifactId>rsocket-load-balancing</artifactId>
-        <groupId>com.vinsguru</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.mvnsearch</groupId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>server-app</artifactId>
