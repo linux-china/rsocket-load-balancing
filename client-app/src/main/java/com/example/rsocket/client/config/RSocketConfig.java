@@ -20,9 +20,10 @@ public class RSocketConfig {
     }
 
     @Bean
-    public RSocketRequester calculatorRequester(RSocketRequester.Builder builder,
-                                                RSocketServiceRegistry rsocketServiceRegistry) {
-        return builder.transports(rsocketServiceRegistry.getServers("com.example.CalculatorService"), new RoundRobinLoadbalanceStrategy());
+    public RSocketRequester mathCalculatorRequester(RSocketRequester.Builder builder,
+                                                    RSocketServiceRegistry rsocketServiceRegistry) {
+        return builder.transports(rsocketServiceRegistry.getServers("com.example.calculator.MathCalculatorService"),
+                new RoundRobinLoadbalanceStrategy());
     }
 
 }
