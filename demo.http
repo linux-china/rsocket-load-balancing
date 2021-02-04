@@ -1,2 +1,6 @@
-# square number
+### square number
 GET http://localhost:9080/square/3
+
+
+### get rsocketlb endpoint
+GET http://localhost:9080/actuator/rsocketlb
