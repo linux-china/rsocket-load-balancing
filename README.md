@@ -22,7 +22,7 @@ Service interface naming should follow `String serviceName = appName.replace("-"
 * com.example.calculator.MathCalculatorService
 * com.example.calculator.ExchangeCalculatorService
 
-If you use RSocket Broker to proxy the requests, and you should use `broker.*` as prefix for service name, such as `broker.com.example.calculator.ExchangeCalculatorService`,
+If you use RSocket Broker to proxy the requests, and you should use `broker:` as prefix for service name, such as `broker:com.example.calculator.ExchangeCalculatorService`,
 and `broker` is the RSocket Broker's name, and you can use `ReactiveDiscoveryClient.getInstances(appName)` to query broker instance list.
 
 Why this naming style?  Take a look at the following steps to call remote RSocket services:
