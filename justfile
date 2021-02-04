@@ -10,3 +10,6 @@ stop-servers:
   kill -9 $(lsof -t -i:6565) &
   kill -9 $(lsof -t -i:6566) &
   kill -9 $(lsof -t -i:6567) &
+
+consul-server:
+  consul agent -dev
