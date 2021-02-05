@@ -19,6 +19,7 @@
 
     <modules>
         <module>rsocket-loadbalance-spring-boot-starter</module>
+        <module>calculator-api</module>
         <module>server-app</module>
         <module>client-app</module>
     </modules>
@@ -56,14 +57,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
