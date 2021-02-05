@@ -1,5 +1,7 @@
-package com.example.rsocket.client.config;
+package com.example.rsocket.client;
 
+import com.example.calculator.ExchangeCalculatorService;
+import com.example.calculator.MathCalculatorService;
 import org.mvnsearch.rsocket.loadbalance.RSocketServiceRegistry;
 import org.mvnsearch.rsocket.loadbalance.proxy.RSocketRemoteServiceBuilder;
 import org.springframework.context.annotation.Bean;
