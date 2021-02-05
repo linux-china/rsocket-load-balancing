@@ -7,7 +7,7 @@ RSocket load balance based on Spring Cloud Service Registry.
 
 # How to run?
 
-* Start Consul first： `docker-compose up -d` or `consul agent -dev` ，then open http://localhost:8500
+* Start Consul first： `docker-compose up -d consul` or `consul agent -dev` ，then open http://localhost:8500
 * Start server-app: `mvn -pl server-app spring-boot:run`
 * Start client-app: `mvn -pl client-app spring-boot:run`
 * Test your RSocket service invocation： `curl http://localhost:9080/square/3`
