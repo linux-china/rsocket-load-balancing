@@ -50,6 +50,10 @@ Spring Cloud的注册发现机制是基于`spring.application.name`，也就是�
 
 通过该种命名方式，我们可以从服务全称中提取中应用名，然后和服务注册中心交互查找对应的实例列表，然后建立和服务提供者的连接，最后基于服务名称进行服务调用。
 
+回到最前面说到的规范，如果应用名和服务接口的绑定关系你实在做不到，那么你可以使用这种方式实现服务调用，  
+如`calculator-server:com.example.calculator.math.MathCalculatorService`，  
+只是你需要更完整的文档说明，当然这种方式也可以解决之前系统接入到目前的架构上，应用的迁移成本也比较小。
+
 
 # References
 
