@@ -5,7 +5,7 @@ import com.example.calculator.annotations.RSocketHandler;
 import com.example.calculator.annotations.SpringRSocketService;
 import reactor.core.publisher.Mono;
 
-@SpringRSocketService("com.example.calculator.MathCalculatorService")
+@SpringRSocketService(MathCalculatorService.RSOCKET_SERVICE_NAME)
 public class MathCalculatorImpl implements MathCalculatorService {
 
     @RSocketHandler("square")
