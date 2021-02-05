@@ -6,7 +6,7 @@ import com.example.calculator.annotations.RSocketHandler;
 import com.example.calculator.annotations.SpringRSocketService;
 import reactor.core.publisher.Mono;
 
-@SpringRSocketService("com.example.calculator.ExchangeCalculatorService")
+@SpringRSocketService(ExchangeCalculatorService.RSOCKET_SERVICE_NAME)
 public class ExchangeCalculatorImpl implements ExchangeCalculatorService {
     @Override
     @RSocketHandler("exchange")
