@@ -40,6 +40,10 @@ Why this naming style?  Take a look at the following steps to call remote RSocke
 
 This naming style is easy for RSocket to interact with service registry and RSocket service routing.
 
+If you can not inline the appName in service's full name, and you can use appName as schema style for service invocation,  
+such as `calculator-server:com.example.calculator.math.MathCalculatorService`. With this way,  
+and it's easy to migrate other applications into RSocket RPC design.
+
 # References
 
 * YMNNALFT: Easy RPC with RSocket: https://spring.io/blog/2021/01/18/ymnnalft-easy-rpc-with-rsocket
