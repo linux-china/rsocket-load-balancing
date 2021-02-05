@@ -3,7 +3,7 @@ RSocket Load Balancing with Spring Cloud Registry
 
 基于Spring Cloud服务注册发现架构实现RSocket负载均衡，架构如下：
 
-![LoadBalance Structure](./loadbalance-structure.png)
+![LoadBalance Structure](loadbalance-structure.png)
 
 # 如何运行?
 
