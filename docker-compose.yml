@@ -2,11 +2,19 @@ version: '3'
 
 services:
   consul:
-      image: consul:1.9.3
-      ports:
-        - "8300:8300"
-        - "8301:8301"
-        - "8302:8302"
-        - "8400:8400"
-        - "8500:8500"
-        - "8600:53/udp"
+    image: consul:1.9.3
+    ports:
+      - "8300:8300"
+      - "8301:8301"
+      - "8302:8302"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+  nacos:
+    image: nacos/nacos-server:1.4.1
+    container_name: nacos-standalone
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    ports:
+      - "8848:8848"
