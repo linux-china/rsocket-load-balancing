@@ -8,8 +8,9 @@ RSocket Load Balancing with Spring Cloud Registry
 # 如何运行?
 
 * 首先启动Consul： `docker-compose up -d consul` ，然后访问 http://localhost:8500
-* 启动server-app: `mvn -pl server-app spring-boot:run`
-* 启动client-app: `mvn -pl client-app spring-boot:run`
+* 编译整个项目: `mvn -DskipTests clean package`
+* 启动server-app: `java -jar server-app/target/server-app-1.0.0-SNAPSHOT.jar`
+* 启动client-app: `java -jar client-app/target/client-app-1.0.0-SNAPSHOT.jar`
 * 测试服务： `curl http://localhost:9080/square/3`
 
 
